@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Student Registration Form</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f5f9;
+            margin: 0;
+            padding: 40px 15px;
+        }
+
+        .container {
+            max-width: 450px;
+            margin: auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #1e293b;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #334155;
+        }
+
+        .required {
+            color: red;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 5px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+        }
+
+        input:invalid:not(:placeholder-shown) {
+            border-color: #dc2626;
+        }
+
+        input:valid:not(:placeholder-shown) {
+            border-color: #16a34a;
+        }
+
+        .error {
+            display: block;
+            color: #dc2626;
+            font-size: 13px;
+            margin-top: 5px;
+            min-height: 16px;
+        }
+
+        .hint {
+            display: block;
+            color: #64748b;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #1d4ed8;
+        }
+
+        #successMessage {
+            display: none;
+            margin-top: 20px;
+            padding: 12px;
+            background-color: #dcfce7;
+            color: #166534;
+            border-radius: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h2>Student Registration Form</h2>
+
+        <form id="registrationForm">
+
+            <!-- Name Field -->
+            <div class="form-group">
+
+                <label for="name">
+                    Name <span class="required">*</span>
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Enter your full name"
+                    minlength="3"
+                    maxlength="30"
+                    pattern="[A-Za-z]+( [A-Za-z]+)*"
+                    title="Enter 3-30 characters using letters and single spaces."
+                    autocomplete="name"
+                    required
+                >
+
+                <span class="hint">
+                    Only letters and spaces; 3-30 characters.
+                </span>
+
+                <span class="error" id="nameError"></span>
+
+            </div>
+
+
+            <!-- Email Field -->
+            <div class="form-group">
+
+                <label for="email">
+                    Email <span class="required">*</span>
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="example@gmail.com"
+                    maxlength="254"
+                    autocomplete="email"
+                    required
+                >
+
+                <span class="hint">
+                    Enter a valid email address.
+                </span>
+
+                <span class="error" id="emailError"></span>
+
+            </div>
+
+
+            <!-- Contact Number Field -->
+            <div class="form-group">
+
+                <label for="contact">
+                    Contact Number <span class="required">*</span>
+                </label>
+
+                <input
+                    type="tel"
+                    id="contact"
+                    name="contact"
+                    placeholder="Enter 10-digit mobile number"
+                    inputmode="numeric"
+                    pattern="[6-9][0-9]{9}"
+                    maxlength="10"
+                    minlength="10"
+                    title="Enter exactly 10 digits starting with 6, 7, 8, or 9."
+                    autocomplete="tel-national"
+                    required
+                >
+
+                <span class="hint">
+                    Enter 10 digits starting with 6, 7, 8, or 9.
+                </span>
+
+                <span class="error" id="contactError"></span>
+
+            </div>
+
+
+            <!-- Submit Button -->
+            <button type="submit">
+                Submit
+            </button>
+
+            <!-- Success Message -->
+            <div id="successMessage" role="status">
+                Registration form validated successfully!
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <script>
+        const form = document.getElementById("registrationForm");
+
+        const nameInput = document.getElementById("name");
+        const emailInput = document.getElementById("email");
+        const contactInput = document.getElementById("contact");
+
+        const nameError = document.getElementById("nameError");
+        const emailError = document.getElementById("emailError");
+        const contactError = document.getElementById("contactError");
+
+        const successMessage = document.getElementById("successMessage");
+
+
+        // Name Validation
+        function validateName() {
+
+            const name = nameInput.value.trim();
+
+            if (name === "") {
+                nameError.textContent = "Name is required.";
+                return false;
+            }
+
+            if (name.length < 3 || name.length > 30) {
+                nameError.textContent =
+                    "Name must contain 3-30 characters.";
+                return false;
+            }
+
+            if (!/^[A-Za-z]+( [A-Za-z]+)*$/.test(name)) {
+                nameError.textContent =
+                    "Use letters and single spaces only.";
+                return false;
+            }
+
+            nameError.textContent = "";
+            return true;
+        }
+
+
+        // Email Validation
+        function validateEmail() {
+
+            const email = emailInput.value.trim();
+
+            if (email === "") {
+                emailError.textContent = "Email is required.";
+                return false;
+            }
+
+            if (emailInput.validity.typeMismatch) {
+                emailError.textContent =
+                    "Please enter a valid email address.";
+                return false;
+            }
+
+            if (!emailInput.checkValidity()) {
+                emailError.textContent =
+                    "Please enter a valid email address.";
+                return false;
+            }
+
+            emailError.textContent = "";
+            return true;
+        }
+
+
+        // Contact Number Validation
+        function validateContact() {
+
+            const contact = contactInput.value.trim();
+
+            if (contact === "") {
+                contactError.textContent =
+                    "Contact number is required.";
+                return false;
+            }
+
+            if (!/^[6-9][0-9]{9}$/.test(contact)) {
+                contactError.textContent =
+                    "Enter exactly 10 digits starting with 6, 7, 8, or 9.";
+                return false;
+            }
+
+            contactError.textContent = "";
+            return true;
+        }
+
+
+        // Validate fields when the user leaves an input
+        nameInput.addEventListener("blur", validateName);
+        emailInput.addEventListener("blur", validateEmail);
+        contactInput.addEventListener("blur", validateContact);
+
+
+        // Clear errors as the user corrects the input
+        nameInput.addEventListener("input", () => {
+            successMessage.style.display = "none";
+
+            if (nameError.textContent !== "") {
+                validateName();
+            }
+        });
+
+        emailInput.addEventListener("input", () => {
+            successMessage.style.display = "none";
+
+            if (emailError.textContent !== "") {
+                validateEmail();
+            }
+        });
+
+        contactInput.addEventListener("input", () => {
+            successMessage.style.display = "none";
+
+            if (contactError.textContent !== "") {
+                validateContact();
+            }
+        });
+
+
+        // Form Submission
+        form.addEventListener("submit", function (event) {
+
+            event.preventDefault();
+
+            const isNameValid = validateName();
+            const isEmailValid = validateEmail();
+            const isContactValid = validateContact();
+
+            if (isNameValid && isEmailValid && isContactValid) {
+
+                successMessage.style.display = "block";
+
+                console.log("Form validated successfully.");
+
+            } else {
+
+                successMessage.style.display = "none";
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>
